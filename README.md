@@ -36,3 +36,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Features
 
 - Clerk authentication with Google or Apple
+- Modal forms and validation
+- Planetscale/Prisma database
