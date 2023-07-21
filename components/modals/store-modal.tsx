@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { useStoreModal } from "@/hooks/use-store-modal";
+import { UseStoreModal } from "@/hooks/use-store-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useState } from "react";
@@ -24,7 +24,7 @@ const formSchema = z.object({
 });
 
 export const StoreModal = () => {
-  const storeModal = useStoreModal();
+  const storeModal = UseStoreModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +42,9 @@ export const StoreModal = () => {
 
       const response = await axios.post("/api/stores", values);
 
-      toast.success("Store created.");
+      // Instead of using router, use window.location.assign as it will do a complete refresh of the page
+      // Avoids specific cases where the database is not ready, data is not in sync
+      window.location.assign(`/${response.data.id}`);
     } catch (error) {
       toast.error("Something went wrong.");
     } finally {
