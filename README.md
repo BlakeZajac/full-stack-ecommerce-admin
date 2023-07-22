@@ -38,3 +38,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - Clerk authentication with Google or Apple
 - Modal forms and validation
 - Planetscale/Prisma database
+- Image upload via Cloudinary CDN
