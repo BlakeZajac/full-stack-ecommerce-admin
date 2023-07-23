@@ -24,6 +24,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { Search } from "lucide-react";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -52,14 +54,22 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Search..."
-          value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(searchKey)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="relative max-w-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="text-gray-600 h-4 w-4" />{" "}
+          </div>
+
+          <Input
+            placeholder="Search..."
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            }
+            className="pl-10" // Adjust the padding to make space for the icon
+          />
+        </div>
       </div>
 
       <div className="rounded-md border">
