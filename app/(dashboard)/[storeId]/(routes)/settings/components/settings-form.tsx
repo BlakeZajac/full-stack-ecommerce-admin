@@ -14,7 +14,7 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { UseOrigin } from "@/hooks/use-origin";
+import { useOrigin } from "@/hooks/use-origin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Store } from "@prisma/client";
 import axios from "axios";
@@ -38,7 +38,7 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
-  const origin = UseOrigin();
+  const origin = useOrigin();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
 
       toast.success("Store successfully deleted.");
     } catch (error) {
-      toast.error("Make sure you remove all products and categories first.");
+      toast.error("Make sure you remove all products and categories associated with this store before deleting.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -90,6 +90,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         onConfirm={onDelete}
         loading={loading}
       />
+
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences" />
 
@@ -141,6 +142,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       </Form>
 
       <Separator />
+
+      {/* Display available public and admin APIs */}
       <ApiAlert
         title="NEXT_PUBLIC_API_URL"
         description={`${origin}/api/${[params.storeId]}`}
