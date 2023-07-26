@@ -46,7 +46,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 
   // If billboard exists, add edit messaging, else add create messaging
   const title = initialData ? "Edit billboard" : "Create billboard";
-  const description = initialData ? "Edit a billboard" : "Add a new billboard";
+  const description = initialData ? "Edit a billboard." : "Add a new billboard.";
   const toastMessage = initialData
     ? "Billboard updated."
     : "Billboard created.";
