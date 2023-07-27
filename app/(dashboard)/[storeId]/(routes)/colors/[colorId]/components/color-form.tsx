@@ -59,13 +59,19 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
 
   useEffect(() => {
     if (initialData) {
-      form.setValue("value", "#" + initialData.value);
+      // Remove extra "#" symbols from the beginning of the value field on load
+      const sanitizedValue = "#" + initialData.value.replace(/^#+/, "");
+      form.setValue("value", sanitizedValue);
     }
   }, [initialData, form]);
 
   const onSubmit = async (data: ColorFormValues) => {
     try {
       setLoading(true);
+
+      // Remove extra "#" symbols from the beginning of the value field
+      data.value = "#" + data.value.replace(/^#+/, "");
+
       if (initialData) {
         await axios.patch(
           `/api/${params.storeId}/colors/${params.colorId}`,
@@ -156,6 +162,15 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                         disabled={loading}
                         placeholder="Color value"
                         {...field}
+                        onChange={(e) => {
+                          // Remove extra "#" symbols from the beginning of the value field
+                          const sanitizedValue = e.target.value.replace(
+                            /^#+/,
+                            "#"
+                          );
+                          // Set the updated value back to the form field
+                          field.onChange(sanitizedValue);
+                        }}
                       />
                       <div
                         className="border p-4 rounded-full"
