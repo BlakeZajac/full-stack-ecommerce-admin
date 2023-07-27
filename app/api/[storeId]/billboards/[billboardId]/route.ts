@@ -1,19 +1,18 @@
-import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
 
-// 1. Get the billboard
+import prismadb from "@/lib/prismadb";
+
 export async function GET(
   req: Request,
   { params }: { params: { billboardId: string } }
 ) {
   try {
     if (!params.billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 });
+      return new NextResponse("Billboard id is required", { status: 400 });
     }
 
-    // Find our billboard
-    const billboard = await prismadb.billboard.findMany({
+    const billboard = await prismadb.billboard.findUnique({
       where: {
         id: params.billboardId,
       },
@@ -22,25 +21,62 @@ export async function GET(
     return NextResponse.json(billboard);
   } catch (error) {
     console.log("[BILLBOARD_GET]", error);
-
     return new NextResponse("Internal error", { status: 500 });
   }
 }
 
-// 2. Update the billboard
-export async function PATCH(
+export async function DELETE(
   req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
+  { params }: { params: { billboardId: string; storeId: string } }
 ) {
   try {
-    // Check if we are authenticated to update the billboard
     const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 });
+    }
+
+    const storeByUserId = await prismadb.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    });
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 });
+    }
+
+    const billboard = await prismadb.billboard.delete({
+      where: {
+        id: params.billboardId,
+      },
+    });
+
+    return NextResponse.json(billboard);
+  } catch (error) {
+    console.log("[BILLBOARD_DELETE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { billboardId: string; storeId: string } }
+) {
+  try {
+    const { userId } = auth();
+
     const body = await req.json();
 
     const { label, imageUrl } = body;
 
     if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 403 });
     }
 
     if (!label) {
@@ -52,7 +88,7 @@ export async function PATCH(
     }
 
     if (!params.billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 });
+      return new NextResponse("Billboard id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -63,10 +99,10 @@ export async function PATCH(
     });
 
     if (!storeByUserId) {
-      return new NextResponse("Unauthorised", { status: 403 });
+      return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const billboard = await prismadb.billboard.updateMany({
+    const billboard = await prismadb.billboard.update({
       where: {
         id: params.billboardId,
       },
@@ -79,50 +115,6 @@ export async function PATCH(
     return NextResponse.json(billboard);
   } catch (error) {
     console.log("[BILLBOARD_PATCH]", error);
-
-    return new NextResponse("Internal error", { status: 500 });
-  }
-}
-
-// 3. Delete the billboard
-export async function DELETE(
-  req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
-) {
-  try {
-    // Check if we are authenticated to update the billboard
-    const { userId } = auth();
-
-    if (!userId) {
-      return new NextResponse("Unauthenticated", { status: 401 });
-    }
-
-    if (!params.billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 });
-    }
-
-    const storeByUserId = await prismadb.store.findFirst({
-      where: {
-        id: params.storeId,
-        userId,
-      },
-    });
-
-    if (!storeByUserId) {
-      return new NextResponse("Unauthorised", { status: 403 });
-    }
-
-    // Find and delete our billboard
-    const billboard = await prismadb.billboard.deleteMany({
-      where: {
-        id: params.billboardId,
-      },
-    });
-
-    return NextResponse.json(billboard);
-  } catch (error) {
-    console.log("[BILLBOARD_DELETE]", error);
-
     return new NextResponse("Internal error", { status: 500 });
   }
 }
