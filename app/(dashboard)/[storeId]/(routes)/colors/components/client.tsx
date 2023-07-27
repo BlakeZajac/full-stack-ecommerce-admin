@@ -7,13 +7,13 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { PlusIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { SizeColumn, columns } from "./columns";
+import { ColorColumn, columns } from "./columns";
 
-interface SizesClientProps {
-  data: SizeColumn[];
+interface ColorsClientProps {
+  data: ColorColumn[];
 }
 
-export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
+export const ColorsClient: React.FC<ColorsClientProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
@@ -21,11 +21,11 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Sizes (${data.length})`}
-          description="Manage sizes for your store"
+          title={`Colors (${data.length})`}
+          description="Manage colors for your store"
         />
 
-        <Button onClick={() => router.push(`/${params.storeId}/sizes/new`)}>
+        <Button onClick={() => router.push(`/${params.storeId}/colors/new`)}>
           <PlusIcon className="mr-2 h-4 w-4" />
           Add new
         </Button>
@@ -35,7 +35,7 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
 
       <DataTable searchKey="name" columns={columns} data={data} />
 
-      <Heading title="API" description="API calls for sizes" />
+      <Heading title="API" description="API calls for colors" />
       <Separator />
       <ApiList entityName="sizes" entityIdName="sizeId" />
     </>
