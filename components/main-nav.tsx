@@ -40,7 +40,7 @@ export function MainNav({
       href: `/${params.storeId}/settings`,
       label: "Settings",
       active: pathname === `/${params.storeId}/settings`,
-    },  
+    },
   ];
 
   return (
