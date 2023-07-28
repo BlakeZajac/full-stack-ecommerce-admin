@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,6 +31,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type ProductFormValues = z.infer<typeof formSchema>;
 
@@ -103,17 +105,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
       if (initialData) {
         await axios.patch(
-          `/api/${params.storeId}/billboards/${params.billboardId}`,
+          `/api/${params.storeId}/products/${params.productId}`,
           data
         );
       } else {
-        await axios.post(`/api/${params.storeId}/billboards`, data);
+        await axios.post(`/api/${params.storeId}/products`, data);
       }
 
       // Refresh to get new initialData
       router.refresh();
-      // Redirect to billboards page
-      router.push(`/${params.storeId}/billboards`);
+      // Redirect to products page
+      router.push(`/${params.storeId}/products`);
 
       toast.success(toastMessage);
     } catch (error) {
@@ -127,18 +129,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     try {
       setLoading(true);
 
-      await axios.delete(
-        `/api/${params.storeId}/billboards/${params.billboardId}`
-      );
+      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
 
       router.refresh();
-      router.push(`/${params.storeId}/billboards`);
+      router.push(`/${params.storeId}/products`);
 
-      toast.success("Billboard successfully deleted.");
+      toast.success("Product successfully deleted.");
     } catch (error) {
-      toast.error(
-        "Make sure you remove all categories using this billboard first."
-      );
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -156,7 +154,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
 
-        {/* Only add the remove button when billboards exist */}
+        {/* Only add the remove button when products exist */}
         {initialData && (
           <Button
             disabled={loading}
@@ -313,6 +311,90 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </SelectContent>
                   </Select>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Color input */}
+            <FormField
+              control={form.control}
+              name="colorId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Color</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a color"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {colors.map((color) => (
+                        <SelectItem key={color.id} value={color.id}>
+                          {color.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Featured checkbox */}
+            <FormField
+              control={form.control}
+              name="isFeatured"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Featured</FormLabel>
+
+                    <FormDescription>
+                      This product will appear on the home page
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            {/* Archive checkbox */}
+            <FormField
+              control={form.control}
+              name="isArchived"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Archived</FormLabel>
+
+                    <FormDescription>
+                      This product will not appear anywhere in the store
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
