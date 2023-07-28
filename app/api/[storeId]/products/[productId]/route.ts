@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     if (!params.productId) {
-      return new NextResponse("Product ID is required", { status: 400 });
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
     const product = await prismadb.product.findUnique({
@@ -43,7 +43,7 @@ export async function DELETE(
     }
 
     if (!params.productId) {
-      return new NextResponse("Product ID is required", { status: 400 });
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -57,7 +57,7 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const product = await prismadb.product.deleteMany({
+    const product = await prismadb.product.delete({
       where: {
         id: params.productId,
       },
@@ -83,15 +83,19 @@ export async function PATCH(
       name,
       price,
       categoryId,
+      images,
       colorId,
       sizeId,
-      images,
       isFeatured,
       isArchived,
     } = body;
 
     if (!userId) {
-      return new NextResponse("Unauthenticed", { status: 401 });
+      return new NextResponse("Unauthenticated", { status: 403 });
+    }
+
+    if (!params.productId) {
+      return new NextResponse("Product id is required", { status: 400 });
     }
 
     if (!name) {
@@ -107,15 +111,15 @@ export async function PATCH(
     }
 
     if (!categoryId) {
-      return new NextResponse("Category ID is required", { status: 400 });
+      return new NextResponse("Category id is required", { status: 400 });
     }
 
     if (!colorId) {
-      return new NextResponse("Color ID is required", { status: 400 });
+      return new NextResponse("Color id is required", { status: 400 });
     }
 
     if (!sizeId) {
-      return new NextResponse("Size ID is required", { status: 400 });
+      return new NextResponse("Size id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -154,9 +158,7 @@ export async function PATCH(
       data: {
         images: {
           createMany: {
-            data: {
-              ...images.map((image: { url: string }) => image),
-            },
+            data: [...images.map((image: { url: string }) => image)],
           },
         },
       },
