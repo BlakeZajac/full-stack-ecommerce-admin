@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { UseStoreModal } from "@/hooks/use-store-modal";
 import { cn } from "@/lib/utils";
-import { store } from "@prisma/client";
+import { Store } from "@prisma/client";
 import {
   Check,
   ChevronsUpDown,
@@ -32,7 +32,7 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 >;
 
 interface StoreSwitcherProps extends PopoverTriggerProps {
-  items: store[];
+  items: Store[];
 }
 
 export default function StoreSwitcher({
