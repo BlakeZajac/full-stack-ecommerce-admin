@@ -27,7 +27,7 @@ export const columns: ColumnDef<OrderColumn>[] = [
 
   {
     accessorKey: "address",
-    header: "Addresss",
+    header: "Address",
   },
 
   {

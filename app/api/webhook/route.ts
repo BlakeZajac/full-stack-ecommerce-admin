@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
-import { Ordering } from "@tanstack/react-table";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -19,7 +18,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (error: any) {
-    return new NextResponse(`Webhook error: ${error.message}`, { status: 400 });
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
   }
 
   const session = event.data.object as Stripe.Checkout.Session;
@@ -41,13 +40,11 @@ export async function POST(req: Request) {
       where: {
         id: session?.metadata?.orderId,
       },
-
       data: {
         isPaid: true,
         address: addressString,
         phone: session?.customer_details?.phone || "",
       },
-
       include: {
         orderItems: true,
       },
@@ -57,9 +54,10 @@ export async function POST(req: Request) {
 
     await prismadb.product.updateMany({
       where: {
-        id: { in: [...productIds] },
+        id: {
+          in: [...productIds],
+        },
       },
-
       data: {
         isArchived: true,
       },
