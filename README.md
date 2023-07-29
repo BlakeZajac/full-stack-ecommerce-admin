@@ -1,42 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Full Stack E-Commerce + Dashboard & CMS: Next.js 13 App Router, React, Tailwind, Prisma, MySQL, 2023
 
-## Getting Started
+For demo, use [Stripe Testing Cards](https://stripe.com/docs/testing)
 
-First, run the development server:
+This is a repository for a full stack ecommerce dashboard and CMS built with Next.js 13, App Router, React, Tailwind, Prisma, and MySQL.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+[Ecommerce Admin - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-admin)
+[Ecommerce Admin - Demo](https://full-stack-ecommerce-admin.vercel.app/)
+[Ecommerce Store - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-store)
+[Ecommerce Store - Demo](https://full-stack-ecommerce-store-bay.vercel.app/)
+
+Features:
+
+- Headless admin components built with shadcn/ui
+- Admin dashboard serves as both a CMS, admin and API
+- Create and manage multiple vendors/stores through a single CMS. Each generating their own API routes individually
+- Create/update/delete categories
+- Create/update/delete products
+- Create/update/delete filters such as color, size and match them in the product creation form
+- Create/update/delete billboards, which are the announcements at the top of the page. These can be attached to single categories, or use them standalone. The admin generates API for all of those cases.
+- Image upload via Cloudinary CDN
+- Search through categories, products, sizes, colors, billboards, with included pagination
+- Control which products are "featured" so they show on the home page
+- See your orders, sales, graphs of your revenue on the dashboard page
+- Authentication via Clerk
+- Order creation
+- Stripe checkout and webhooks
+- MySQL, Prisma and Planetscale database
+
+### Prerequisites
+
+**Node version 14.x**
+
+### Cloning the repository
+
+```shell
+git clone https://github.com/BlakeZajac/full-stack-ecommerce-admin.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install packages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+npm i
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Setup .env file
 
-## Learn More
+```js
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
 
-To learn more about Next.js, take a look at the following resources:
+# This was inserted by `prisma init`:
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+DATABASE_URL=''
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=""
+STRIPE_API_KEY=
+FRONTEND_STORE_URL=http://localhost:3001
+STRIPE_WEBHOOK_SECRET=
+```
 
-## Deploy on Vercel
+### Connect to PlanetScale and Push Prisma
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```shell
+npx prisma generate
+npx prisma db push
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Start the app
 
-## Features
+```shell
+npm run dev
+```
 
-- Clerk authentication with Google or Apple
-- Modal forms and validation
-- Planetscale/Prisma database
-- Image upload via Cloudinary CDN
-- Headless UI components via shadcn/ui
+## Available commands
+
+Running commands with npm `npm run [command]`
+
+| command | description                              |
+| :------ | :--------------------------------------- |
+| `dev`   | Starts a development instance of the app |
