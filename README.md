@@ -1,13 +1,13 @@
-# Full Stack E-Commerce + Dashboard & CMS: Next.js 13 App Router, React, Tailwind, Prisma, MySQL, 2023
+# Full stack ecommerce admin
 
 For demo, use [Stripe Testing Cards](https://stripe.com/docs/testing)
 
 This is a repository for a full stack ecommerce dashboard and CMS built with Next.js 13, App Router, React, Tailwind, Prisma, and MySQL.
 
-[Ecommerce Admin - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-admin)
-[Ecommerce Admin - Demo](https://full-stack-ecommerce-admin.vercel.app/)
-[Ecommerce Store - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-store)
-[Ecommerce Store - Demo](https://full-stack-ecommerce-store-bay.vercel.app/)
+- [Ecommerce Admin - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-admin)
+- [Ecommerce Admin - Demo](https://full-stack-ecommerce-admin.vercel.app/)
+- [Ecommerce Store - Repository](https://github.com/BlakeZajac/full-stack-ecommerce-store)
+- [Ecommerce Store - Demo](https://full-stack-ecommerce-store-bay.vercel.app/)
 
 Features:
 
